@@ -60,11 +60,12 @@ public class ProductsBuyerController {
     private Button detailNBetButton;
 
     @FXML
-    private ComboBox<Category> selectCategoriesBuyer;
+    private ComboBox<String> selectCategoriesBuyer;
 
     private DetailProductsController detailProductsController;
     private CategoryDAO categoryDAO;
     private LotDAO lotDAO;
+    Connection connection;
 
     public void setDetailProductsController(DetailProductsController controller) {
         detailProductsController = controller;
@@ -87,9 +88,13 @@ public class ProductsBuyerController {
     @FXML
     void SelectCategories(ActionEvent event) {
         try {
-            Category selectedCategory = selectCategoriesBuyer.getValue();
-            List<Lot> lots = lotDAO.getLotsByCategory(selectedCategory.getId());
+            String selectedCategory = selectCategoriesBuyer.getSelectionModel().getSelectedItem();
+            System.out.println(selectedCategory);
+            List<Lot> lots = lotDAO.getLotsByCategory();
             TableViewLotsBuyer.getItems().clear();
+
+
+
             TableViewLotsBuyer.getItems().addAll(lots);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -98,12 +103,12 @@ public class ProductsBuyerController {
 
     @FXML
     void initialize() throws Exception {
-        Connection connection = DatabaseConnector.ConnectDb(); // Получаем подключение к базе данных
+        connection = DatabaseConnector.ConnectDb(); // Получаем подключение к базе данных
         categoryDAO = new CategoryDAO(connection);
         lotDAO = new LotDAO(connection);
 
         try {
-            List<Category> categories = categoryDAO.getAllCategories();
+            List<String> categories = categoryDAO.getAllStringCategories();
             selectCategoriesBuyer.getItems().addAll(categories);
         } catch (SQLException e) {
             e.printStackTrace();

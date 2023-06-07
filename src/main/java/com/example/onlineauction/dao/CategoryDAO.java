@@ -1,5 +1,6 @@
 package com.example.onlineauction.dao;
 
+import com.example.onlineauction.DatabaseConnector;
 import com.example.onlineauction.model.Category;
 
 import java.sql.Connection;
@@ -10,7 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryDAO {
-    private final Connection connection;
+    private static Connection connection;
+
+    static {
+        try {
+            connection = DatabaseConnector.ConnectDb();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public CategoryDAO(Connection connection) {
         this.connection = connection;
@@ -78,6 +87,63 @@ public class CategoryDAO {
         }
 
         return categories;
+    }
+
+    public List<String> getAllStringCategories() throws SQLException {
+        List<String> categories = new ArrayList<>();
+        String query = "SELECT * FROM category";
+
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                String name = resultSet.getString("name_category");
+
+                String category = name;
+                categories.add(category);
+            }
+        }
+        return categories;
+    }
+
+    public static String getCategoryById(int id) throws SQLException{
+        String query = "SELECT name_category FROM category where idcategory= " + id;
+
+        try (PreparedStatement statement = connection.prepareStatement(query); ResultSet resultSet = statement.executeQuery()){
+            while (resultSet.next()){
+                return resultSet.getString("name_category");
+            }
+        }
+        return "";
+    }
+
+    public static int getCategoryIdByString(String category) throws SQLException{
+        int result = 0;
+        String query = "SELECT idcategory FROM category where name_category= " + category;
+
+        try (PreparedStatement statement = connection.prepareStatement(query); ResultSet resultSet = statement.executeQuery()){
+            while (resultSet.next()){
+                result = resultSet.getInt("idcategory");
+            }
+        }
+        return result;
+    }
+
+    public static List<Category> getAllCategoryById(int id) throws SQLException{
+        List<Category> list = new ArrayList<>();
+
+        String query = "SELECT * FROM lots where category_id= " + id;
+
+        try(PreparedStatement statement = connection.prepareStatement(query); ResultSet resultSet = statement.executeQuery()){
+            while (resultSet.next()){
+                Category category = new Category(
+                  resultSet.getString("name_lots"),
+                        resultSet.getDouble("start_price"),
+                        resultSet.getDouble("current_price"),
+                        resultSet.getDate("dosing_date"),
+                        resultSet.getDouble("")
+                );
+            }
+        }
     }
 }
 

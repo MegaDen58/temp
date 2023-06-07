@@ -16,8 +16,18 @@ public class Lot {
     private int sellerId;
     private int currentBuyerId;
     private int categoryId;
+    private String statusString;
+    private String category;
 
-    public Lot() {
+    public Lot(String name, String category, double startPrice, double currentPrice, String statusString) {
+        this.name = name;
+        this.category = category;
+        this.startPrice = startPrice;
+        this.currentPrice = currentPrice;
+        this.statusString = statusString;
+    }
+    public Lot(){
+
     }
 
     public Lot(String name, String description, double startPrice, double currentPrice, double stepPrice,
@@ -38,7 +48,12 @@ public class Lot {
     public int getId() {
         return id;
     }
-
+    public String getStatusString() {
+        return statusString;
+    }
+    public String getCategory() {
+        return category;
+    }
     public void setId(int id) {
         this.id = id;
     }
@@ -155,6 +170,8 @@ public class Lot {
                 ", sellerId=" + sellerId +
                 ", currentBuyerId=" + currentBuyerId +
                 ", categoryId=" + categoryId +
+                ", category=" + category +
+                ", statusString=" + statusString +
                 '}';
     }
 }

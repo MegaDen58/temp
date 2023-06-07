@@ -1,15 +1,29 @@
 package com.example.onlineauction.model;
 
+import com.example.onlineauction.dao.CategoryDAO;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
+import java.sql.Date;
 
 public class Category {
     private int id;
     private StringProperty name;
-
+    private String name1;
+    private double startPrice;
+    private double myBet;
+    private double currentPrice;
+    private Date date;
     public Category(int id, String name) {
         this.id = id;
         this.name = new SimpleStringProperty(name);
+    }
+    public Category(String name1, double startPrice, double currentPrice, Date date, double myBet){
+        this.name1 = name1;
+        this.startPrice = startPrice;
+        this.currentPrice = currentPrice;
+        this.date = date;
+        this.myBet = myBet;
     }
 
     public int getId() {

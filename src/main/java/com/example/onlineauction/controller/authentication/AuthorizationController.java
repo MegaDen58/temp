@@ -36,7 +36,7 @@ public class AuthorizationController {
     @FXML
     private PasswordField passwordUserFieldAuth;
 
-    private int userId;
+    public static int userId;
 
     public static String login;
     public static String password;
@@ -89,6 +89,7 @@ public class AuthorizationController {
                         default:
                             return;
                     }
+                    userId = user.getId();
                     WindowsManager.openWindow(fxmlPath, title);
                     Stage stageClose = (Stage) goToRegistrationButton.getScene().getWindow();
                     stageClose.close();

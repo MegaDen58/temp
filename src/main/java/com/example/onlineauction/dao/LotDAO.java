@@ -105,7 +105,6 @@ public class LotDAO {
                 }
             }
         }
-
         return null;
     }
 
@@ -170,6 +169,7 @@ public class LotDAO {
         return lots;
     }
 
+
     public List<Lot> getActiveLots() throws SQLException {
         List<Lot> lots = new ArrayList<>();
         String query = "SELECT * FROM lots WHERE status_lots = 'Активный'";
@@ -230,6 +230,31 @@ public class LotDAO {
 
         return lots;
     }
+
+    public List<Lot> getLotsBySellerId(int sellerId) throws SQLException{
+        List<Lot> lots = new ArrayList<>();
+        String query = "SELECT * FROM lots WHERE seller_id = ?";
+
+        try(PreparedStatement statement = connection.prepareStatement(query)){
+            statement.setInt(1, sellerId);
+
+            try(ResultSet resultSet = statement.executeQuery()){
+                while (resultSet.next()){
+                    String name = resultSet.getString("name_lots");
+                    int category = resultSet.getInt("category_id");
+                    double price = resultSet.getDouble("start_price");
+                    double currentPrice = resultSet.getDouble("current_price");
+                    String status = resultSet.getString("status_lots");
+                    Lot lot = new Lot(name, CategoryDAO.getCategoryById(category), price, currentPrice, status);
+                    lots.add(lot);
+                }
+            }
+        }
+        return lots;
+    }
+
+
+
 
     public void updateLotStatus(int lotId, StatusLot statusLot) throws SQLException {
         String query = "UPDATE lots SET status_lots = ? WHERE idlots = ?";

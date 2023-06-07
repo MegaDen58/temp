@@ -80,7 +80,7 @@ public class ManagementProductsController {
         Stage currentStage = (Stage) backButtonManageLots.getScene().getWindow();
         currentStage.close();
     }
-    UserDAO userDAO1 = new UserDAO(DriverManager.getConnection("jdbc:mysql://localhost:3306/auction", "root", "6778"));
+    UserDAO userDAO1 = new UserDAO(DriverManager.getConnection("jdbc:mysql://localhost:3306/auction", "root", "12345"));
     @FXML
     void SaveManageLots(ActionEvent event) throws SQLException {
         String name = nameLotsField.getText();

@@ -6,8 +6,7 @@ import java.sql.SQLException;
 
 public class DatabaseConnector {
     public static Connection ConnectDb() throws Exception{
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/auction", "root", "6778");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/auction?serverTimezone=Europe/Moscow", "root", "12345");
         return connection;
     }
-
 }

@@ -10,8 +10,10 @@ import java.util.ResourceBundle;
 import com.example.onlineauction.DatabaseConnector;
 import com.example.onlineauction.WindowsManager;
 import com.example.onlineauction.constants.Role;
+import com.example.onlineauction.constants.StatusLot;
 import com.example.onlineauction.controller.DetailProductsController;
 import com.example.onlineauction.controller.ManagementProductsController;
+import com.example.onlineauction.controller.authentication.AuthorizationController;
 import com.example.onlineauction.controller.authentication.RegistrationController;
 import com.example.onlineauction.dao.LotDAO;
 import com.example.onlineauction.model.Lot;
@@ -114,22 +116,27 @@ public class ProductsSellerController {
         Connection connection = DatabaseConnector.ConnectDb(); // Получаем соединение с базой данных
         LotDAO lotDAO = new LotDAO(connection);
 
+        List<Lot> lotus = lotDAO.getLotsBySellerId(AuthorizationController.userId);
+        ObservableList<Lot> lots = FXCollections.observableArrayList(lotus);
+
         // Инициализируем столбцы таблицы
         col_categoryLotsSeller.setCellValueFactory(new PropertyValueFactory<>("category"));
         col_currentPriceLotsSeller.setCellValueFactory(new PropertyValueFactory<>("currentPrice"));
         col_nameLotsSeller.setCellValueFactory(new PropertyValueFactory<>("name"));
         col_startPriceLotsSeller.setCellValueFactory(new PropertyValueFactory<>("startPrice"));
-        col_statusLotsSeller.setCellValueFactory(new PropertyValueFactory<>("status"));
+        col_statusLotsSeller.setCellValueFactory(new PropertyValueFactory<>("statusString"));
 
-        // Загружаем лоты продавца и добавляем их в таблицу
-        try {
-            List<Lot> sellerLots = lotDAO.getLotsBySeller(ManagementProductsController.sellerId);
-            ObservableList<Lot> lotsObservableList = FXCollections.observableArrayList(sellerLots);
-            tableViewLotsSeller.setItems(lotsObservableList);
-            tableViewLotsSeller.refresh();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        tableViewLotsSeller.setItems(lots);
+
+//        // Загружаем лоты продавца и добавляем их в таблицу
+//        try {
+//            List<Lot> sellerLots = lotDAO.getLotsBySeller(ManagementProductsController.sellerId);
+//            ObservableList<Lot> lotsObservableList = FXCollections.observableArrayList(sellerLots);
+//            tableViewLotsSeller.setItems(lotsObservableList);
+//            tableViewLotsSeller.refresh();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 
 }
